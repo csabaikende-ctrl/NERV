@@ -57,6 +57,10 @@ jobs:
           mv out/tools/bin/libmagiskboot.so out/tools/bin/magiskboot
           chmod +x out/tools/bin/magiskboot
           rm magisk.apk
+      - name: Patch download_fw to use One UI 7 firmware
+        run: |
+          # Pin firmware to One UI 7 (G990B2XXSFHYI1) instead of latest (One UI 8)
+          sed -i 's|samloader -m "$MODEL" -r "$CSC" -i "$IMEI" -s "$SERIAL_NO" download|samloader -m "$MODEL" -r "$CSC" -i "$IMEI" -s "$SERIAL_NO" download -v "G990B2XXSFHYI1/G990B2OXMFHYI1/G990B2XXSFHYI1"|g' scripts/download_fw.sh
       - name: Build dependencies
         run: |
           source ./buildenv.sh ${{ matrix.target }}
