@@ -12,6 +12,8 @@ jobs:
       fail-fast: false
       matrix:
         target: [r9q2]
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -49,6 +51,15 @@ jobs:
           distribution: 'temurin'
           java-version: '11'
           cache: 'gradle'
+      - name: Pre-download magiskboot
+        run: |
+          mkdir -p out/tools/bin
+          MAGISK_URL=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" https://api.github.com/repos/topjohnwu/Magisk/releases/latest | jq -r '.assets[] | .browser_download_url' | grep 'Magisk.*\.apk')
+          curl -L -s -o magisk.apk "$MAGISK_URL"
+          unzip -q -j magisk.apk 'lib/x86_64/libmagiskboot.so'
+          mv libmagiskboot.so out/tools/bin/magiskboot
+          chmod +x out/tools/bin/magiskboot
+          rm magisk.apk
       - name: Build dependencies
         run: |
           source ./buildenv.sh ${{ matrix.target }}
