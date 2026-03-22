@@ -33,7 +33,7 @@ if [[ "$SOURCE_PRODUCT_FIRST_API_LEVEL" != "$TARGET_PRODUCT_FIRST_API_LEVEL" ]];
     system/framework/services.jar/smali/com/android/server/knox/dar/ddar/ta/TAProxy.smali
     $(find "$APKTOOL_DIR/system/framework/services.jar/" -name "PowerManagerUtil.smali" 2>/dev/null | sed "s|$APKTOOL_DIR/||" | head -1)
     "
-    for f in $FTP; do
+    for f in $FTP; do [[ -z "$f" || ! -f "$APKTOOL_DIR/$f" ]] && continue;
         sed -i \
             "s/\"MAINLINE_API_LEVEL: $SOURCE_PRODUCT_FIRST_API_LEVEL\"/\"MAINLINE_API_LEVEL: $TARGET_PRODUCT_FIRST_API_LEVEL\"/g" \
             "$APKTOOL_DIR/$f"
@@ -94,7 +94,7 @@ if [[ "$SOURCE_AUTO_BRIGHTNESS_TYPE" != "$TARGET_AUTO_BRIGHTNESS_TYPE" ]]; then
     system/framework/ssrm.jar/smali/com/android/server/ssrm/PreMonitor.smali
     system/priv-app/SecSettings/SecSettings.apk/smali_classes4/com/samsung/android/settings/Rune.smali
     "
-    for f in $FTP; do
+    for f in $FTP; do [[ -z "$f" || ! -f "$APKTOOL_DIR/$f" ]] && continue;
         sed -i "s/\"$SOURCE_AUTO_BRIGHTNESS_TYPE\"/\"$TARGET_AUTO_BRIGHTNESS_TYPE\"/g" "$APKTOOL_DIR/$f"
     done
     LOG_STEP_OUT
@@ -113,7 +113,7 @@ if [[ "$(GET_FP_SENSOR_TYPE "$SOURCE_FP_SENSOR_CONFIG")" != "$(GET_FP_SENSOR_TYP
     system/framework/services.jar/smali/com/android/server/biometrics/sensors/fingerprint/FingerprintUtils.smali
     system/priv-app/SecSettings/SecSettings.apk/smali_classes4/com/samsung/android/settings/biometrics/fingerprint/FingerprintSettingsUtils.smali
     "
-    for f in $FTP; do
+    for f in $FTP; do [[ -z "$f" || ! -f "$APKTOOL_DIR/$f" ]] && continue;
         sed -i "s/$SOURCE_FP_SENSOR_CONFIG/$TARGET_FP_SENSOR_CONFIG/g" "$APKTOOL_DIR/$f"
     done
 
@@ -183,7 +183,7 @@ if [[ "$(GET_FP_SENSOR_TYPE "$TARGET_FP_SENSOR_CONFIG")" == "optical" ]]; then
     FTP="
     system/priv-app/BiometricSetting/BiometricSetting.apk/smali/com/samsung/android/biometrics/app/setting/fingerprint/vi/VisualEffectContainer.smali
     "
-    for f in $FTP; do
+    for f in $FTP; do [[ -z "$f" || ! -f "$APKTOOL_DIR/$f" ]] && continue;
         sed -i "s/green_circle/ripple/g" "$APKTOOL_DIR/$f"
         sed -i "s/white_circle/ripple/g" "$APKTOOL_DIR/$f"
     done
@@ -203,7 +203,7 @@ if [[ "$SOURCE_MDNIE_SUPPORTED_MODES" != "$TARGET_MDNIE_SUPPORTED_MODES" ]] || \
     FTP="
     system/framework/services.jar/smali_classes2/com/samsung/android/hardware/display/SemMdnieManagerService.smali
     "
-    for f in $FTP; do
+    for f in $FTP; do [[ -z "$f" || ! -f "$APKTOOL_DIR/$f" ]] && continue;
         sed -i "s/\"$SOURCE_MDNIE_SUPPORTED_MODES\"/\"$TARGET_MDNIE_SUPPORTED_MODES\"/g" "$APKTOOL_DIR/$f"
         sed -i "s/\"$SOURCE_MDNIE_WEAKNESS_SOLUTION_FUNCTION\"/\"$TARGET_MDNIE_WEAKNESS_SOLUTION_FUNCTION\"/g" "$APKTOOL_DIR/$f"
     done
@@ -280,7 +280,7 @@ if [[ "$SOURCE_HFR_MODE" != "$TARGET_HFR_MODE" ]]; then
     system/priv-app/SettingsProvider/SettingsProvider.apk/smali/com/android/providers/settings/DatabaseHelper.smali
     system_ext/priv-app/SystemUI/SystemUI.apk/smali/com/android/systemui/LsRune.smali
     "
-    for f in $FTP; do
+    for f in $FTP; do [[ -z "$f" || ! -f "$APKTOOL_DIR/$f" ]] && continue;
         sed -i "s/\"$SOURCE_HFR_MODE\"/\"$TARGET_HFR_MODE\"/g" "$APKTOOL_DIR/$f"
     done
     LOG_STEP_OUT
@@ -295,7 +295,7 @@ if [[ "$SOURCE_HFR_SUPPORTED_REFRESH_RATE" != "$TARGET_HFR_SUPPORTED_REFRESH_RAT
     system/framework/framework.jar/smali_classes6/com/samsung/android/hardware/display/RefreshRateConfig.smali
     system/priv-app/SecSettings/SecSettings.apk/smali_classes4/com/samsung/android/settings/display/SecDisplayUtils.smali
     "
-    for f in $FTP; do
+    for f in $FTP; do [[ -z "$f" || ! -f "$APKTOOL_DIR/$f" ]] && continue;
         if [[ "$TARGET_HFR_SUPPORTED_REFRESH_RATE" != "none" ]]; then
             sed -i "s/\"$SOURCE_HFR_SUPPORTED_REFRESH_RATE\"/\"$TARGET_HFR_SUPPORTED_REFRESH_RATE\"/g" "$APKTOOL_DIR/$f"
         else
@@ -316,7 +316,7 @@ if [[ "$SOURCE_HFR_DEFAULT_REFRESH_RATE" != "$TARGET_HFR_DEFAULT_REFRESH_RATE" ]
     system/priv-app/SecSettings/SecSettings.apk/smali_classes4/com/samsung/android/settings/display/SecDisplayUtils.smali
     system/priv-app/SettingsProvider/SettingsProvider.apk/smali/com/android/providers/settings/DatabaseHelper.smali
     "
-    for f in $FTP; do
+    for f in $FTP; do [[ -z "$f" || ! -f "$APKTOOL_DIR/$f" ]] && continue;
         sed -i "s/\"$SOURCE_HFR_DEFAULT_REFRESH_RATE\"/\"$TARGET_HFR_DEFAULT_REFRESH_RATE\"/g" "$APKTOOL_DIR/$f"
     done
     LOG_STEP_OUT
@@ -333,7 +333,7 @@ if [[ "$SOURCE_HFR_SEAMLESS_BRT" != "$TARGET_HFR_SEAMLESS_BRT" ]] || \
         FTP="
         system/framework/framework.jar/smali_classes6/com/samsung/android/hardware/display/RefreshRateConfig.smali
         "
-        for f in $FTP; do
+        for f in $FTP; do [[ -z "$f" || ! -f "$APKTOOL_DIR/$f" ]] && continue;
             sed -i "s/\"$SOURCE_HFR_SEAMLESS_BRT\"/\"$TARGET_HFR_SEAMLESS_BRT\"/g" "$APKTOOL_DIR/$f"
             sed -i "s/\"$SOURCE_HFR_SEAMLESS_LUX\"/\"$TARGET_HFR_SEAMLESS_LUX\"/g" "$APKTOOL_DIR/$f"
         done
@@ -349,7 +349,7 @@ if [[ "$SOURCE_MULTI_MIC_MANAGER_VERSION" != "$TARGET_MULTI_MIC_MANAGER_VERSION"
     FTP="
     system/framework/framework.jar/smali_classes5/com/samsung/android/camera/mic/SemMultiMicManager.smali
     "
-    for f in $FTP; do
+    for f in $FTP; do [[ -z "$f" || ! -f "$APKTOOL_DIR/$f" ]] && continue;
         sed -i "s/$SOURCE_MULTI_MIC_MANAGER_VERSION/$TARGET_MULTI_MIC_MANAGER_VERSION/g" "$APKTOOL_DIR/$f"
     done
     LOG_STEP_OUT
@@ -363,7 +363,7 @@ if [[ "$SOURCE_SSRM_CONFIG_NAME" != "$TARGET_SSRM_CONFIG_NAME" ]]; then
     FTP="
     system/framework/ssrm.jar/smali/com/android/server/ssrm/Feature.smali
     "
-    for f in $FTP; do
+    for f in $FTP; do [[ -z "$f" || ! -f "$APKTOOL_DIR/$f" ]] && continue;
         sed -i "s/$SOURCE_SSRM_CONFIG_NAME/$TARGET_SSRM_CONFIG_NAME/g" "$APKTOOL_DIR/$f"
     done
 
@@ -378,7 +378,7 @@ if [[ "$SOURCE_DVFS_CONFIG_NAME" != "$TARGET_DVFS_CONFIG_NAME" ]]; then
     FTP="
     system/framework/ssrm.jar/smali/com/android/server/ssrm/Feature.smali
     "
-    for f in $FTP; do
+    for f in $FTP; do [[ -z "$f" || ! -f "$APKTOOL_DIR/$f" ]] && continue;
         sed -i "s/$SOURCE_DVFS_CONFIG_NAME/$TARGET_DVFS_CONFIG_NAME/g" "$APKTOOL_DIR/$f"
     done
     LOG_STEP_OUT
