@@ -57,14 +57,34 @@ jobs:
           mv out/tools/bin/libmagiskboot.so out/tools/bin/magiskboot
           chmod +x out/tools/bin/magiskboot
           rm magisk.apk
-      - name: Patch download_fw to use One UI 7 firmware
-        run: |
-          # Pin firmware to One UI 7 (G990B2XXSFHYI1) instead of latest (One UI 8)
-          sed -i 's|samloader -m "$MODEL" -r "$CSC" -i "$IMEI" -s "$SERIAL_NO" download|samloader -m "$MODEL" -r "$CSC" -i "$IMEI" -s "$SERIAL_NO" download -v "G990B2XXSFHYI1/G990B2OXMFHYI1/G990B2XXSFHYI1"|g' scripts/download_fw.sh
       - name: Build dependencies
         run: |
           source ./buildenv.sh ${{ matrix.target }}
           ./scripts/build_dependencies.sh
+      - name: Pin firmware to One UI 7
+        run: |
+          python3 - << 'EOF'
+          import re
+          fw_versions = {
+              'SM-G990B2': 'G990B2XXSFHYI1/G990B2OXMFHYI1/G990B2XXSFHYI1',
+              'SM-S911B':  'S911BXXS8EYK5/S911BOXM8EYK5/S911BXXU8EYI5',
+          }
+          with open('scripts/download_fw.sh', 'r') as f:
+              content = f.read()
+          old = 'samloader -m "$MODEL" -r "$CSC" -i "$IMEI" -s "$SERIAL_NO" download -O'
+          new_lines = []
+          new_lines.append('  FW_VERSION=""')
+          for model, ver in fw_versions.items():
+              new_lines.append(f'  [[ "$MODEL" == "{model}" ]] && FW_VERSION="{ver}"')
+          new_lines.append('  FW_VER_FLAG=""')
+          new_lines.append('  [[ -n "$FW_VERSION" ]] && FW_VER_FLAG="-v $FW_VERSION"')
+          new_call = 'samloader -m "$MODEL" -r "$CSC" -i "$IMEI" -s "$SERIAL_NO" download $FW_VER_FLAG -O'
+          replacement = '\n'.join(new_lines) + '\n  ' + new_call
+          content = content.replace(old, replacement)
+          with open('scripts/download_fw.sh', 'w') as f:
+              f.write(content)
+          print('Patched download_fw.sh to use One UI 7 firmware versions')
+          EOF
       - name: Download source firmware
         run: |
           source ./buildenv.sh ${{ matrix.target }}
