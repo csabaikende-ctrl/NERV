@@ -61,33 +61,6 @@ jobs:
         run: |
           source ./buildenv.sh ${{ matrix.target }}
           ./scripts/build_dependencies.sh
-      - name: Pin firmware to One UI 7
-        run: |
-          python3 - << 'PYEOF'
-          with open('scripts/download_fw.sh', 'r') as f:
-              content = f.read()
-          old_line = '    samloader -m "$MODEL" -r "$CSC" -i "$IMEI" -s "$SERIAL_NO" download -O "$ODIN_DIR/${MODEL}_${CSC}" 1> /dev/null || exit 1'
-          new_block = '''    case "$MODEL" in
-              SM-G990B2)
-                samloader -m "$MODEL" -r "$CSC" -i "$IMEI" -s "$SERIAL_NO" download -v "G990B2XXSFHYI1/G990B2OXMFHYI1/G990B2XXSFHYI1" -O "$ODIN_DIR/${MODEL}_${CSC}" 1> /dev/null || exit 1
-                ;;
-              SM-S911B)
-                samloader -m "$MODEL" -r "$CSC" -i "$IMEI" -s "$SERIAL_NO" download -v "S911BXXS8EYK5/S911BOXM8EYK5/S911BXXU8EYI5" -O "$ODIN_DIR/${MODEL}_${CSC}" 1> /dev/null || exit 1
-                ;;
-              *)
-                samloader -m "$MODEL" -r "$CSC" -i "$IMEI" -s "$SERIAL_NO" download -O "$ODIN_DIR/${MODEL}_${CSC}" 1> /dev/null || exit 1
-                ;;
-            esac'''
-          if old_line in content:
-              content = content.replace(old_line, new_block)
-              with open('scripts/download_fw.sh', 'w') as f:
-                  f.write(content)
-              print('SUCCESS: Patched download_fw.sh to use One UI 7 for SM-G990B2 and SM-S911B')
-          else:
-              print('ERROR: Could not find samloader line to patch!')
-              print('Looking for:', repr(old_line))
-              import sys; sys.exit(1)
-          PYEOF
       - name: Download source firmware
         run: |
           source ./buildenv.sh ${{ matrix.target }}
