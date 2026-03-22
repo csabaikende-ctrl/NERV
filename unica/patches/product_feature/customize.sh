@@ -31,7 +31,7 @@ if [[ "$SOURCE_PRODUCT_FIRST_API_LEVEL" != "$TARGET_PRODUCT_FIRST_API_LEVEL" ]];
     system/framework/services.jar/smali/com/android/server/SystemServer.smali
     system/framework/services.jar/smali/com/android/server/enterprise/hdm/HdmVendorController.smali
     system/framework/services.jar/smali/com/android/server/knox/dar/ddar/ta/TAProxy.smali
-    system/framework/services.jar/smali_classes2/com/android/server/power/PowerManagerUtil.smali
+    $(find "$APKTOOL_DIR/system/framework/services.jar/" -name "PowerManagerUtil.smali" 2>/dev/null | sed "s|$APKTOOL_DIR/||" | head -1)
     "
     for f in $FTP; do
         sed -i \
@@ -90,7 +90,7 @@ if [[ "$SOURCE_AUTO_BRIGHTNESS_TYPE" != "$TARGET_AUTO_BRIGHTNESS_TYPE" ]]; then
     DECODE_APK "system" "system/priv-app/SecSettings/SecSettings.apk"
 
     FTP="
-    system/framework/services.jar/smali_classes2/com/android/server/power/PowerManagerUtil.smali
+    $(find "$APKTOOL_DIR/system/framework/services.jar/" -name "PowerManagerUtil.smali" 2>/dev/null | sed "s|$APKTOOL_DIR/||" | head -1)
     system/framework/ssrm.jar/smali/com/android/server/ssrm/PreMonitor.smali
     system/priv-app/SecSettings/SecSettings.apk/smali_classes4/com/samsung/android/settings/Rune.smali
     "
